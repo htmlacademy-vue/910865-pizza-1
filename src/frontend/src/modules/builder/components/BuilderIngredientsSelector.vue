@@ -42,12 +42,8 @@ export default {
     };
   },
   computed: {
-    ...mapState("Builder", ["pizzas"]),
+    ...mapState("Builder", ["sauces"]),
     ...mapState("Builder", ["currentSauce"]),
-
-    sauces() {
-      return this.pizzas.sauces;
-    },
   },
   methods: {
     ...mapMutations("Builder", {

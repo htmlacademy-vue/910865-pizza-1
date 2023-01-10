@@ -80,10 +80,6 @@ export const UNAUTHORIZED_OPTIONS = ["Получу сам", "Новый адре
 
 export const DELIVERY_DEFAULT_TYPE = OPTIONS.GET_BY_MYSELF;
 
-export const MAX_PIZZA_ID_NUMBER = 100000;
-
-export const MIN_PIZZA_ID_NUMBER = 0;
-
 export const addressProperySeparator = "-";
 
 export const ADDRESS_FORM_INPUT_DATA = [

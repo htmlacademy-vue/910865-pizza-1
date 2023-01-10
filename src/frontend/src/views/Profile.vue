@@ -57,7 +57,6 @@ import OrderUserInfo from "@/modules/orders/components/OrderUserInfo.vue";
 import OrderAddress from "@/modules/orders/components/OrderAddress.vue";
 
 import { addressProperySeparator } from "@/common/constants";
-import { generateRandomNumberInRange } from "@/common/helpers";
 
 import {
   ADD_NEW_ADDRESS,
@@ -65,6 +64,8 @@ import {
   SET_EDITING_ADDRESS,
   DELETE_ADDRESS
 } from "@/store/mutation-types";
+
+import { uniqueId } from "lodash";
 
 export default {
   name: "Profile",
@@ -75,7 +76,7 @@ export default {
   data() {
     return {
       isAddNewAddress: false,
-      newAddressId: generateRandomNumberInRange(10, 100000),
+      newAddressId: parseInt(uniqueId()),
       name: "",
       street: "",
       house: "",
@@ -136,7 +137,7 @@ export default {
       if (this.isAddNewAddress) {
         const newAddress = {
           ...addressData,
-          id: generateRandomNumberInRange(10, 100000),
+          id: parseInt(uniqueId()),
         };
 
         this.addNewAddress(newAddress);
@@ -153,7 +154,7 @@ export default {
     },
   },
   beforeCreate() {
-    if (!this.$store.state["Auth"].isAuthorized) {
+    if (!this.$store.state["Auth"].isAuthenticated) {
       this.$router.push({ name: "Login" });
     }
   },

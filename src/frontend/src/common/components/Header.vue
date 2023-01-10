@@ -14,7 +14,7 @@
     </div>
 
     <div
-      v-if="!isAuthorized"
+      v-if="!isAuthenticated"
       class="header__user"
     >
       <RouterLink
@@ -78,7 +78,7 @@ export default {
   },
   mixins: [imageLink, imageWithExtensionLink],
   computed: {
-    ...mapState("Auth", ["user", "isAuthorized"]),
+    ...mapState("Auth", ["user", "isAuthenticated"]),
     ...mapGetters("Cart", ["totalOrderPrice"]),
   },
   methods: {

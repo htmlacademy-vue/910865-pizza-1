@@ -15,11 +15,13 @@ import {
   CHANGE_ACTIVE_SIDEBAR_MENU
 } from "@/store/mutation-types";
 
-export const resetState = () => ({
-  ...state,
+export const resetState = state => ({
   selectedMisc: {},
   showModal: false,
   editingAddress: -1,
+  activeSidebarMenu: state["Orders"].activeSidebarMenu,
+  userAddresses: state["Orders"].userAddresses,
+  userOrders: state["Orders"].userOrders,
 });
 
 export const setupState = () => ({

@@ -16,15 +16,14 @@
 <script>
 import { mapState, mapGetters, mapMutations } from "vuex";
 
-import { generateRandomNumberInRange } from "@/common/helpers";
-import { MAX_PIZZA_ID_NUMBER, MIN_PIZZA_ID_NUMBER } from "@/common/constants";
-
 import {
   ADD_TO_CART,
   UPDATE_EXISTING_PIZZA,
   CLEAR_BUILDER_PROPERTIES,
   SET_EDITING_PIZZA
 } from "@/store/mutation-types";
+
+import { uniqueId } from "lodash";
 
 export default {
   name: "PriceCounter",
@@ -56,7 +55,7 @@ export default {
         name: this.pizzaName,
         price: this.totalPizzaPrice,
         amount: 1,
-        id: this.editingPizza ? this.editingPizza.id : generateRandomNumberInRange(MAX_PIZZA_ID_NUMBER, MIN_PIZZA_ID_NUMBER),
+        id: this.editingPizza ? this.editingPizza.id : parseInt(uniqueId()),
       };
 
       if (this.editingPizza) {

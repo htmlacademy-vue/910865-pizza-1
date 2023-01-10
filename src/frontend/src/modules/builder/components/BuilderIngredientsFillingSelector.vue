@@ -63,12 +63,8 @@ export default {
     };
   },
   computed: {
-    ...mapState("Builder", ["pizzas"]),
+    ...mapState("Builder", ["ingredients"]),
     ...mapState("Builder", ["selectedIngredients"]),
-
-    ingredients() {
-      return this.pizzas.ingredients;
-    },
   },
   methods: {
     ...mapMutations("Builder", {

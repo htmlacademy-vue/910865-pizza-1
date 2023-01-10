@@ -35,12 +35,8 @@ export default {
     RadioButton,
   },
   computed: {
-    ...mapState("Builder", ["pizzas"]),
+    ...mapState("Builder", ["dough"]),
     ...mapState("Builder", ["currentDough"]),
-
-    dough() {
-      return this.pizzas.dough;
-    },
   },
   methods: {
     ...mapMutations("Builder", {

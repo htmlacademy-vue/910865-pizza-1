@@ -30,9 +30,9 @@ import { mapState, mapGetters, mapMutations } from "vuex";
 
 import SubmitButton from "@/common/components/SubmitButton.vue";
 
-import { generateRandomNumberInRange } from "@/common/helpers";
-
 import { CHANGE_SHOW_MODAL_STATUS, ADD_NEW_ORDER } from "@/store/mutation-types";
+
+import { uniqueId } from "lodash";
 
 export default {
   name: "CartFooter",
@@ -43,7 +43,7 @@ export default {
     ...mapState("Cart", ["cart"]),
     ...mapGetters("Cart", ["totalOrderPrice"]),
     ...mapState("Orders", ["selectedMisc", "userOrders"]),
-    ...mapState("Auth", ["isAuthorized"]),
+    ...mapState("Auth", ["isAuthenticated"]),
 
     buttonDisabled() {
       return this.cart.length === 0 || this.totalOrderPrice === 0;
@@ -51,17 +51,17 @@ export default {
   },
   methods: {
     ...mapMutations("Orders", {
-      showModal: CHANGE_SHOW_MODAL_STATUS,
+      changeShowModalStatus: CHANGE_SHOW_MODAL_STATUS,
       addNewOrder: ADD_NEW_ORDER,
     }),
 
     formSubmitHandler() {
-      this.showModal(true);
+      this.changeShowModalStatus(true);
 
-      if (this.isAuthorized) {
+      if (this.isAuthenticated) {
         const order = {
-          id: this.userOrders[this.userOrders.length - 1].id + 1,
-          orderNumber: generateRandomNumberInRange(1000, 100000),
+          id: parseInt(uniqueId()) + 1,
+          orderNumber: parseInt(uniqueId()),
           pizzas: this.cart,
           additionals: Object.values(this.selectedMisc),
           orderPrice: this.totalOrderPrice,

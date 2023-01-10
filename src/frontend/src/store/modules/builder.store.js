@@ -2,7 +2,10 @@ import { ITEMS_INPUT_DATA, MAX_INGREDIENTS_NUMBER } from "@/common/constants";
 import { countSum } from "@/common/helpers";
 
 import {
-  FETCH_PIZZAS,
+  FETCH_DOUGH,
+  FETCH_SIZES,
+  FETCH_SAUCES,
+  FETCH_INGREDIENTS,
   FETCH_MISC,
   UPDATE_DOUGH_VALUE,
   UPDATE_SAUCE_VALUE,
@@ -16,11 +19,11 @@ import {
   CLEAR_BUILDER_PROPERTIES
 } from "@/store/mutation-types";
 
-import pizzasJson from "@/static/pizza.json";
-import miscJson from "@/static/misc.json";
-
 export const setupState = () => ({
-  pizzas: [],
+  dough: [],
+  sizes: [],
+  sauces: [],
+  ingredients: [],
   misc: [],
   selectedIngredients: {},
   currentDough: ITEMS_INPUT_DATA.DOUGH.DEFAULT_RADIO_CHECK,
@@ -32,9 +35,9 @@ export const setupState = () => ({
 
 const getters = {
   totalPizzaPrice(state) {
-    const multiplier = state.pizzas.sizes.find(it => it.name === state.currentSize).multiplier;
-    const doughPrice = state.pizzas.dough.find(it => it.name === state.currentDough).price;
-    const saucePrice = state.pizzas.sauces.find(it => it.name === state.currentSauce).price;
+    const multiplier = state.sizes.find(it => it.name === state.currentSize).multiplier;
+    const doughPrice = state.dough.find(it => it.name === state.currentDough).price;
+    const saucePrice = state.sauces.find(it => it.name === state.currentSauce).price;
     const ingredientsPrice = countSum(Object.values(state.selectedIngredients));
 
     return multiplier * (doughPrice + saucePrice + ingredientsPrice);
@@ -43,25 +46,52 @@ const getters = {
 
 const actions = {
   async init({ dispatch }) {
-    dispatch("fetchPizzas");
+    dispatch("fetchDough");
+    dispatch("fetchSizes");
+    dispatch("fetchSauces");
+    dispatch("fetchIngredients");
     dispatch("fetchMisc");
   },
 
-  fetchMisc({ commit }) {
-    const misc = miscJson;
+  async fetchDough({ commit }) {
+    const dough = await this.$api.dough.query();
+
+    commit(FETCH_DOUGH, dough);
+  },
+  async fetchSizes({ commit }) {
+    const sizes = await this.$api.sizes.query();
+
+    commit(FETCH_SIZES, sizes);
+  },
+  async fetchSauces({ commit }) {
+    const sauces = await this.$api.sauces.query();
+
+    commit(FETCH_SAUCES, sauces);
+  },
+  async fetchIngredients({ commit }) {
+    const ingredients = await this.$api.ingredients.query();
+
+    commit(FETCH_INGREDIENTS, ingredients);
+  },
+  async fetchMisc({ commit }) {
+    const misc = await this.$api.misc.query();
 
     commit(FETCH_MISC, misc);
-  },
-  fetchPizzas({ commit }) {
-    const pizzas = pizzasJson;
-
-    commit(FETCH_PIZZAS, pizzas);
   },
 };
 
 const mutations = {
-  [FETCH_PIZZAS](state, items) {
-    state.pizzas = items;
+  [FETCH_DOUGH](state, items) {
+    state.dough = items;
+  },
+  [FETCH_SIZES](state, items) {
+    state.sizes = items;
+  },
+  [FETCH_SAUCES](state, items) {
+    state.sauces = items;
+  },
+  [FETCH_INGREDIENTS](state, items) {
+    state.ingredients = items;
   },
   [FETCH_MISC](state, items) {
     state.misc = items;
@@ -114,7 +144,7 @@ const mutations = {
     }
 
     if (count !== 0) {
-      selectedIngredients[ingredientName] = state.pizzas.ingredients.find(it => it.name === ingredientName);
+      selectedIngredients[ingredientName] = state.ingredients.find(it => it.name === ingredientName);
       selectedIngredients[ingredientName].amount = count;
     } else {
       delete selectedIngredients[ingredientName];
